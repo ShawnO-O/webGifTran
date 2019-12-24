@@ -1,0 +1,197 @@
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>好車大聯盟~賀圖產生器</title>
+</head>
+<link rel="stylesheet" href="styles.css">
+
+<body align="center" style="margin-top: 50px;">
+    <script src="https://unpkg.com/gifler@0.1.0/gifler.min.js"></script>
+    <script src="gif.js"></script>
+    <script src="GIFEncoder.js"></script>
+    <script src="FileSaver.js"></script>
+    <!-- <script src="Bolb.js"></script> -->
+    <div>
+        <canvas class='cvs' id='test2'></canvas>
+    </div>
+    <div class="inputa" style="margin-top: 20px; padding-left: 20px;align-content: center;">
+        <br>
+
+        <b>
+            請輸入名稱
+            <br>
+            <span> <input style="font-size: 30px;font-family: MyHelvetica;" id='name' value="我想要任何字" maxlength="7"
+                    placeholder="車行名稱(最多七字)" /></span>
+        </b>
+
+    </div>
+
+    <div id="loadingGif" style="padding-top: 20px;padding-bottom: 20px;" hidden="true">
+        <img src="images/ZZ5H.gif" style="width: 100;height: 100;"> 圖片產生中...請稍後
+    </div>
+    <div style="padding-bottom: 50px;">
+        <button id='btn' class="button3" type="button">轉成GIF動態賀圖</button>
+        <button id='reload' class="button3" type="button">重新設定</button>
+    </div>
+    <div id="iosSaver" hidden="true">
+        <b>請使用長按儲存賀圖</b></br>
+        <img id="imgSucessPhoto">
+    </div>
+</body>
+
+<script>
+    var input = document.getElementById('name');
+    var canvas = document.getElementById('test2');
+
+    var loadingGif = document.getElementById('loadingGif');
+    canvas.width = 300;
+    canvas.height = 400;
+    var ctx2 = canvas.getContext('2d');
+    // use external library to parse and draw gif animation
+
+    var btn = document.getElementById('btn');
+    var gif = new GIF({
+        workers: 1,
+        quality: 10,
+        repeat: 0,
+
+        debug: true
+
+    });
+    // var img2 = new Image();
+    // img2.src = 'images/h03.png';
+    var count = 0;
+    var time = 0;
+    var dTime = 100;
+    var array = [];
+    var arrayD = [];
+    var fontArraySize = 0;
+    var intFontSize = 70;
+
+    function onDrawFrame(ctx, frame) {
+        if (count > 0) {
+            dTime = (Date.now() - time)
+        }
+
+        time = Date.now();
+        // update canvas size
+        canvas.width = frame.width;
+        canvas.height = frame.height;
+
+        ctx.width = frame.width;
+        ctx.height = frame.height;
+
+        ctx.drawImage(frame.buffer, 0, 0);
+        intFontSize = 55;
+        //字型大小
+        // ctx.font = "bold " + intFontSize;
+        ctx.font = "bold " + intFontSize + "px MyHelvetica";
+
+        var ss = input.value.split('');
+        fontArraySize = ss.length;
+        if (fontArraySize > 0) {
+            var pos = 0;
+            ss.forEach(element => {
+                //因為看起來文字部分占了2/4
+                var widthBase = frame.width / 4;
+
+                // var FontX = widthBase * 2 / fontArraySize * pos + (fontSize.value * 0.8) + widthBase;
+                var FontX = 0
+                if (ss.length > 6) {
+                    FontX = widthBase + (widthBase * 2 / ss.length * pos) - 40 + (pos * 3);
+                } else if (ss.length > 5) {
+                    FontX = widthBase + (widthBase * 2 / ss.length * pos) - 40 + (pos * 4);
+                } else if (ss.length > 4) {
+                    widthBase = widthBase - 10
+                        // console.log(widthBase + "+" + widthBase + "*2/" + ss.length + "*" + pos);
+                    FontX = widthBase + (widthBase * 2 / ss.length * pos) - 20 + (pos * 7);
+                } else {
+                    FontX = widthBase + (widthBase * 2 / ss.length * pos) - 15
+                }
+                var base = 30;
+                var FontY = frame.height - 40;
+                ctx.fillText(element, FontX, FontY);
+                ctx.lineWidth = "1";
+
+
+                pos++;
+            });
+
+        }
+        console.log("count:" + count)
+            //因為gif有19禎
+        if (count <= 19) {
+            gif.addFrame(ctx, {
+                delay: 300
+            });
+
+            if (count == 19) {
+                ok();
+            }
+        }
+        count++;
+
+    }
+
+    function ok() {
+        console.log(281)
+        gif.addFrame(ctx2, {
+            copy: true
+        });
+        // gif.removeChild()
+    }
+
+    var mBlob = null;
+
+
+    //新的gif生成
+    function gifFactory() {
+        if (mBlob == null) {
+            gif.on('finished', function(blob) {
+                loadingGif.hidden = true;
+                // 这里的blob就是gif图片blod格式信息
+                mBlob = blob;
+                saveAs(blob, "hotcard.gif");
+                window.location.reload();
+            });
+            gif.render();
+        } else {
+            openURL();
+        }
+    }
+
+    function forIosSafari() {
+        iosSaver.hidden = false
+        var file = new File([blob], "name.gif");
+        var gif = new gif(file)
+        imgSucessPhoto.src = URL.createObjectURL(file);
+    }
+
+    //共用
+    function openURL() {
+        //下载动作
+        var el = document.createElement('a');
+        el.href = URL.createObjectURL(mBlob);
+        el.download = input.value; //设置下载文件名称
+        document.body.appendChild(el);
+        var evt = document.createEvent("MouseEvents");
+        evt.initEvent("click", false, false);
+        el.dispatchEvent(evt);
+        document.body.removeChild(el);
+
+        // window.open(URL.createObjectURL(mBlob));
+    }
+
+    gifler('images/happy_new_year2.gif').frames(canvas, onDrawFrame);
+    btn.onclick = () => {
+        // console.log("clickTimes:" + clickTimes)
+        loadingGif.hidden = false;
+        gifFactory();
+    }
+    reload.onclick = () => {
+        window.location.reload();
+    }
+</script>
+
+</html>

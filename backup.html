@@ -1,0 +1,348 @@
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Canvas Gif</title>
+</head>
+
+<body>
+    <script src="https://unpkg.com/gifler@0.1.0/gifler.min.js"></script>
+    <script src="gif.js"></script>
+    <script src="GIFEncoder.js"></script>
+    <div>
+        <canvas id='test2'></canvas>
+    </div>
+    <div>
+        請輸入車行名稱
+        <span> <input id='name' /></span>
+    </div>
+    <div>
+        <span>
+
+            <form>
+                字體大小
+                <select id="fontSize" name="YourLocation">
+                    　<option value="50">50</option>
+                    　<option value="70">70</option>
+                    　<option value="90">90</option>
+                    　<option value="110">110</option>
+                </select>
+            </form>
+        </span>
+    </div>
+    <form>
+        請選擇文字樣式<br><br>
+        <input id="mode1" type="radio" name="Fruit" value="1" checked="true"> 內文
+        <input id="mode2" type="radio" name="Fruit" value="2"> 外框
+        <input id="mode3" type="radio" name="Fruit" value="3">內文+外框
+    </form>
+    請選擇文字顏色
+    <select id="colorContent" name="colorContent" size="1">
+        <option value="White" style="background:white;">White</option>
+        <option value="Black" style="background:black;" SELECTED>Black</option>
+        <option value="Red" style="background:red;">Red</option>
+        <option value="Yellow" style="background:yellow;">Yellow</option>
+        <option value="Pink" style="background:pink;">Pink</option>
+        <option value="Green" style="color:green;">Green</option>
+        <option value="Orange" style="background:orange;">Orange</option>
+        <option value="Purple" style="background:purple;">Purple</option>
+        <option value="Blue" style="background:blue;">Blue</option>
+        <option value="Beige" style="background:beige;">Beige</option>
+        <option value="Brown" style="background:brown;">Brown</option>
+        <option value="Teal" style="background:teal;">Teal</option>
+        <option value="Navy" style="background:navy;">Navy</option>
+        <option value="Maroon" style="background:maroon;">Maroon</option>
+        <option value="LimeGreen" style="background:limegreen;">LimeGreen</option>
+    </select>
+    請選擇外框顏色
+    <select id="colorFrame" name="colorFrame" size="1">
+        <option value="White" style="background:white;" SELECTED>White</option>
+        <option value="Black" style="background:black;">Black</option>
+        <option value="Red" style="background:red;">Red</option>
+        <option value="Yellow" style="background:yellow;">Yellow</option>
+        <option value="Pink" style="background:pink;">Pink</option>
+        <option value="Green" style="color:green;">Green</option>
+        <option value="Orange" style="background:orange;">Orange</option>
+        <option value="Purple" style="background:purple;">Purple</option>
+        <option value="Blue" style="background:blue;">Blue</option>
+        <option value="Beige" style="background:beige;">Beige</option>
+        <option value="Brown" style="background:brown;">Brown</option>
+        <option value="Teal" style="background:teal;">Teal</option>
+        <option value="Navy" style="background:navy;">Navy</option>
+        <option value="Maroon" style="background:maroon;">Maroon</option>
+        <option value="LimeGreen" style="background:limegreen;">LimeGreen</option>
+    </select>
+    <div>
+        請選擇特效<br><br>
+        <input type="checkbox" name="vehicle1" value="Bike"> I have a bike<br>
+        <input type="checkbox" name="vehicle2" value="Car"> I have a car<br>
+        <input type="checkbox" name="vehicle3" value="Boat" checked> I have a boat<br>
+    </div>
+    <div>
+        <button id='btn'>我是按鈕</button>
+
+    </div>
+
+</body>
+
+<script>
+    var input = document.getElementById('name');
+    var canvas = document.getElementById('test2');
+    var fontSize = document.getElementById('fontSize');
+    var colorContent = document.getElementById('colorContent');
+    var colorFrame = document.getElementById('colorFrame');
+    var mode1 = document.getElementById('mode1');
+    var mode2 = document.getElementById('mode2');
+    var mode3 = document.getElementById('mode3');
+    canvas.width = 300;
+    canvas.height = 400;
+    var ctx2 = canvas.getContext('2d');
+    // use external library to parse and draw gif animation
+    var img = new Image();
+    img.src = 'images/h03.png';
+    var btn = document.getElementById('btn');
+    var gif = new GIF({
+        workers: 1,
+        quality: 10
+    });
+    // var img2 = new Image();
+    // img2.src = 'images/h03.png';
+    var count = 0;
+    var time = 0;
+    var dTime = 100;
+    var array = [];
+    var arrayD = [];
+    function onDrawFrame(ctx, frame) {
+        if (count > 0) {
+            dTime = (Date.now() - time)
+        }
+        console.log(count + ":" + dTime);
+        time = Date.now();
+        // update canvas size
+        canvas.width = frame.width;
+        canvas.height = frame.height;
+
+        ctx.drawImage(frame.buffer, 0, 0);
+        ctx.font = "bold " + fontSize.value + "px serif";
+
+        ctx.fillStyle = colorContent.value;
+        // ctx.drawImage(img, frame.width / 5 + 80, 0)
+        // ctx.drawImage(img, frame.width / 5 + 120, 0)
+        // ctx.drawImage(img, frame.width / 5 + 160, 0)
+        // ctx.drawImage(img, frame.width / 5 + 200, 0)
+        // HorseRunning(ctx,0);
+        // FontResize(ctx,0);
+
+        var ss = input.value.split('');
+        if (ss.length > 0) {
+
+            var pos = 0;
+            ss.forEach(element => {
+                console.log(element);
+                if (mode1.checked || mode3.checked) {
+                    ctx.fillStyle = colorContent.value;
+                    ctx.fillText(element, frame.width / 5 + 27 + (pos * 60), frame.height - 80);
+                }
+
+                if (mode2.checked || mode3.checked) {
+                    ctx.strokeStyle = colorFrame.value;
+                    ctx.lineWidth = "1.5";
+                    ctx.strokeText(element, frame.width / 5 + 27 + (pos * 60), frame.height - 80);
+                }
+                
+                pos++;
+            });
+
+        }
+        // ctx.fillStyle = "black";
+        // ctx.fillText("顏", frame.width / 5 + 27, frame.height - 80);
+        // // HorseRunning(ctx,1);
+        // // FontResize(ctx,1);
+        // ctx.font = "bold 60px Microsoft YaHei";
+        // ctx.lineWidth = "1";
+        // ctx.strokeStyle = "orange";
+        // ctx.strokeText("家", frame.width / 5 + 87, frame.height - 80);
+        // // HorseRunning(ctx,2);
+        // // FontResize(ctx,2);
+        // ctx.fillStyle = "black";
+        // ctx.fillText("肉", frame.width / 5 + 175, frame.height - 80);
+        // ctx.lineWidth = "1";
+        // ctx.strokeStyle = "orange";
+        // ctx.strokeText("肉", frame.width / 5 + 175, frame.height - 80);
+
+        // // HorseRunning(ctx,3);
+        // // FontResize(ctx,3);
+        // ctx.fillText("粽", frame.width / 5 + 215, frame.height - 80);
+
+        if (count <= 111) {
+            // console.log("53:" + count)
+            // array.push(canvas)
+            // arrayD.push(dTime)
+            //用時間差來取得gif本來的延遲
+            gif.addFrame(canvas, { delay: 300 });
+            // array.push(canvas)
+            if (count == 111) {
+                ok();
+            }
+        }
+        count++;
+        // 或者从canvas的上下文复制像素信息
+
+    }
+
+    //文字上下動
+    function FontJump() {
+
+    }
+
+
+    //內文閃爍
+    function ContentFlicker() {
+
+    }
+
+
+    //邊框閃爍
+    function FrameFlicker() {
+        if (count % 2 == 0) {
+            ctx.strokeText = "rgb(122,169,42)";
+        } else {
+            ctx.strokeText = "rgb(255,255,255)";
+        }
+    }
+
+    //閃爍
+    function Flicker(ctx, count) {
+        if (count % 2 == 0) {
+            ctx.fillStyle = "rgb(122,169,42)";
+        } else {
+            ctx.fillStyle = "rgb(255,255,255)";
+        }
+    }
+
+    //文字放大縮小
+    function FontResize(ctx, pos) {
+        if (pos == 0) {
+            if (count % 8 == 0 || count % 8 == 4) {
+                ctx.font = "bold 100px serif";
+
+            } else {
+                ctx.font = "bold 60px serif";
+
+            }
+        } else if (pos == 1) {
+            if (count % 8 == 1 || count % 8 == 5) {
+                ctx.font = "bold 100px serif";
+
+            } else {
+                ctx.font = "bold 60px serif";
+
+            }
+        } else if (pos == 2) {
+            if (count % 8 == 2 || count % 8 == 6) {
+                ctx.font = "bold 100px serif";
+
+            } else {
+                ctx.font = "bold 60px serif";
+
+            }
+        } else if (pos == 3) {
+            if (count % 8 == 3 || count % 8 == 7) {
+                ctx.font = "bold 100px serif";
+
+            } else {
+                ctx.font = "bold 60px serif";
+
+            }
+        }
+    }
+
+    //人生跑馬燈
+    function HorseRunning(ctx, pos) {
+        if (pos == 0) {
+            if (count % 8 == 0 || count % 8 == 4) {
+                // ctx.font = "bold 100px serif";
+                ctx.fillStyle = "rgb(122,169,42)";
+            } else {
+                // ctx.font = "bold 60px serif";
+                ctx.fillStyle = "rgb(255,255,255)";
+            }
+        } else if (pos == 1) {
+            if (count % 8 == 1 || count % 8 == 5) {
+                // ctx.font = "bold 100px serif";
+                ctx.fillStyle = "rgb(122,169,42)";
+            } else {
+                // ctx.font = "bold 60px serif";
+                ctx.fillStyle = "rgb(255,255,255)";
+            }
+        } else if (pos == 2) {
+            if (count % 8 == 2 || count % 8 == 6) {
+                // ctx.font = "bold 100px serif";
+                ctx.fillStyle = "rgb(122,169,42)";
+            } else {
+                // ctx.font = "bold 60px serif";
+                ctx.fillStyle = "rgb(255,255,255)";
+            }
+        } else if (pos == 3) {
+            if (count % 8 == 3 || count % 8 == 7) {
+                // ctx.font = "bold 100px serif";
+                ctx.fillStyle = "rgb(122,169,42)";
+            } else {
+                // ctx.font = "bold 60px serif";
+                ctx.fillStyle = "rgb(255,255,255)";
+            }
+        }
+    }
+
+
+
+    var mBlob = null;
+
+    function ok() {
+        // var i = 0;
+        // array.forEach(element => {
+        //     gif.addFrame(element,{delay:70});
+        //     i++;
+        // });
+        gif.addFrame(ctx2, { copy: true });
+    }
+
+    //新的gif生成
+    function gifFactory() {
+        if (mBlob == null) {
+            // gif.addFrame(ctx2, { copy: true });
+            gif.on('finished', function (blob) {
+                // 这里的blob就是gif图片blod格式信息
+                mBlob = blob;
+                openURL();
+            });
+            gif.render();
+        } else {
+            openURL();
+        }
+    }
+
+    //共用
+    function openURL() {
+        window.open(URL.createObjectURL(mBlob));
+    }
+    gifler('images/b01.gif').frames(canvas, onDrawFrame);
+    var clickTimes = 0;
+    var str = "顏家肉粽";
+    btn.onclick = () => {
+        console.log("clickTimes:" + clickTimes)
+        // if (clickTimes % 2 == 0)
+
+        // else
+
+
+        clickTimes++;
+        // console.log(array.length);
+        // //必須等到gif跑完才可以按
+        // // if (count >= 111) {
+        // gifFactory();
+        // // }
+    }
+</script>
+
+</html>

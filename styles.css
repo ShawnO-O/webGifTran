@@ -1,0 +1,158 @@
+body {
+    align-content: center;
+    color: black;
+    /* background-color: yellowgreen; */
+    background-image: url('images/bg.png');
+    font-size: 25px;
+    background-size: cover;
+    font-family: MyHelvetica;
+    /* background-image: images/bg_1; */
+    /* background-image: url('images/bg_1.jpg'); */
+}
+
+@font-face {
+    font-family: MyHelvetica;
+    src: url('fonts/NotoSansMonoCJKtc-Regular.otf');
+    font-weight: bold;
+}
+
+.a1 {
+    color: red;
+    text-align: center;
+}
+
+h1 {
+    color: blue
+}
+
+p {
+    font-size: 50px;
+    color: black;
+}
+
+.cvs {
+    margin: 0 auto;
+    text-align: center;
+    width: 600;
+}
+
+.container {
+    margin: auto;
+    width: 600px;
+}
+
+.inputa {
+    border-radius: 12px;
+    /* background-color: white;
+    border: 1px gray solid;
+    width: 60%; */
+}
+
+.btn {
+    margin-top: 20px;
+    margin-bottom: 50px;
+    padding: 15px;
+    font-size: 25px;
+}
+
+
+/* .special {
+    /* color: rgb(83, 121, 34);
+    padding: 10px;
+    background: white;
+    color: rgb(60, 18, 173);
+    width: 100px;
+    height: 100px;
+    line-height: 70px;
+    border: 1px red;
+    border-radius: 300px; */
+
+
+/* 高度 */
+
+
+/* } */
+
+*/ h {
+    padding: 10px;
+    background: white;
+    color: rgb(60, 18, 173);
+    width: 100px;
+    height: 100px;
+    line-height: 70px;
+    border: 1px red;
+    border-radius: 300px;
+    /* 高度 */
+}
+
+b {
+    font-size: 50px;
+    margin-bottom: 20px;
+}
+
+.button {
+    background-color: #d6d2ba;
+    /* Green */
+    border: none;
+    color: black;
+    padding: 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 12px;
+}
+
+.button:hover {
+    background-color: #4CAF50;
+    /* Green */
+    color: white;
+}
+
+.button2 {
+    background-color: #d6d2ba;
+    font-weight: 600;
+    /* Green */
+    border: none;
+    color: black;
+    padding-left: 16px;
+    padding-right: 16px;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 30px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 20px;
+    font-family: MyHelvetica;
+}
+
+.button3 {
+    font-family: MyHelvetica;
+    margin-left: 16dp;
+    margin-right: 16dp;
+    font-weight: 600;
+    background-color: white;
+    /* Green */
+    border: none;
+    color: black;
+    padding: 3px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 25px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.colorImg {
+    margin-top: 10px;
+    margin-left: 10px;
+    width: 60px;
+    height: 60px;
+}
